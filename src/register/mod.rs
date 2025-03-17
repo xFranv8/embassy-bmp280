@@ -1,7 +1,7 @@
 pub enum Register {
     ID,
     CALIB,
-    PRESSURE,
+    // PRESSURE,
     TEMPERATURE,
 }
 
@@ -10,7 +10,7 @@ impl Register {
         match self {
             Register::ID => 0xD0,
             Register::CALIB => 0x88,
-            Register::PRESSURE => 0xF7,
+            // Register::PRESSURE => 0xF7,
             Register::TEMPERATURE => 0xFA,
         }
     }

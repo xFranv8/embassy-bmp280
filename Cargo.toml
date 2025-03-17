@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 embassy-executor = { version = "0.7.0", path = "../embassy/embassy-executor", features = ["task-arena-size-98304", "arch-cortex-m", "executor-thread", "executor-interrupt", "defmt"] }
 embassy-time = { version = "0.4.0", path = "../embassy/embassy-time", features = ["defmt", "defmt-timestamp-uptime"] }
-embassy-rp = { version = "0.3.0", path = "../embassy/embassy-rp", features = ["defmt", "unstable-pac", "time-driver", "critical-section-impl", "rp2040"] }
+embassy-rp = { version = "0.4.0", path = "../embassy/embassy-rp", features = ["defmt", "unstable-pac", "time-driver", "critical-section-impl", "rp2040"] }
 embassy-usb = { version = "0.4.0", path = "../embassy/embassy-usb", features = ["defmt"] }
 embassy-usb-logger = { version = "0.4.0", path = "../embassy/embassy-usb-logger" }
 

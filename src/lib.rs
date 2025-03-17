@@ -17,7 +17,7 @@ impl<'d> BMP280<'d> {
         Self { i2c }
     }
 
-    pub async fn read_id(&mut self) -> (Result<u8, emb_rp::i2c::Error>) {
+    pub async fn read_id(&mut self) -> Result<u8, emb_rp::i2c::Error> {
         let mut buffer: [u8; 1] = [0; 1];
 
         let id: u8 = register::Register::ID.addr();
@@ -68,9 +68,9 @@ impl<'d> BMP280<'d> {
 
     pub async fn read_temperature(
         &mut self,
-        dig_T1: u16,
-        dig_T2: i16,
-        dig_T3: i16,
+        dig_t1: u16,
+        dig_t2: i16,
+        dig_t3: i16,
     ) -> Result<f32, emb_rp::i2c::Error> {
         let mut temp_raw = [0u8; 3];
         self.i2c
@@ -81,17 +81,18 @@ impl<'d> BMP280<'d> {
             )
             .await?;
 
-        let adc_T = ((temp_raw[0] as i32) << 12)
+        let adc_t = ((temp_raw[0] as i32) << 12)
             | ((temp_raw[1] as i32) << 4)
             | ((temp_raw[2] as i32) >> 4);
 
-        let var1 = (((adc_T >> 3) - ((dig_T1 as i32) << 1)) * (dig_T2 as i32)) >> 11;
-        let var2 = (((((adc_T >> 4) - (dig_T1 as i32)) * ((adc_T >> 4) - (dig_T1 as i32))) >> 12)
-            * (dig_T3 as i32))
+        let var1: i32 = (((adc_t >> 3) - ((dig_t1 as i32) << 1)) * (dig_t2 as i32)) >> 11;
+        let var2: i32 = (((((adc_t >> 4) - (dig_t1 as i32)) * ((adc_t >> 4) - (dig_t1 as i32)))
+            >> 12)
+            * (dig_t3 as i32))
             >> 14;
 
-        let t_fine = var1 + var2;
-        let temperature = ((t_fine * 5 + 128) >> 8) as f32 / 100.0;
+        let t_fine: i32 = var1 + var2;
+        let temperature: f32 = ((t_fine * 5 + 128) >> 8) as f32 / 100.0;
 
         Ok(temperature)
     }
